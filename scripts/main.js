@@ -1,26 +1,30 @@
-// const gameBar = document.querySelector("#gameBar");
-// const gameBarWidth = 1000;
-// const gameBarHeight = document.body.scrollHeight;
+import config from './apikey'
 
-// const ctx = gameBar.getContext("2d");
+let keys = ['a','s','d',' ','j','k','l'];
+const tileBtns = document.querySelectorAll('.tileBtn')
+const tileLines = document.querySelectorAll('.tileLine')
+window.addEventListener('keydown', (e)=>{
+    keys.forEach((item, index) => {
+       if(item === e.key){
+        tileBtns[index].style.background = 'rgb(255,255,255) radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(254,255,0,1) 50%, rgba(250,151,2,1) 100%)'
+        tileBtns[index].style.boxShadow = '0px 0px 100px yellow'
+        tileBtns[index].style.transition = '0.1s'
+       } 
+    });
+})
+window.addEventListener('keyup', (e)=>{
+    keys.forEach((item, index) => {
+       if(item === e.key){
+        tileBtns[index].style.background = 'rgb(255,255,255)'
+        tileBtns[index].style.boxShadow = 'none'
+        tileBtns[index].style.transition = 'none'
+       } 
+    });
+})
 
-// gameBar.width = gameBarWidth;
-// gameBar.height = gameBarHeight;
-
-// ctx.fillStyle = "blue";
-
-// ctx.fillRect(0, 0, gameBarWidth, gameBarHeight);
-
-// const $clickable = document.querySelector(".clickable");
-// const $bottom = document.querySelector(".bottom");
-
-// const startTime = performance.now();
-// const duration = 1000;
-// const TRAVEL_DISTANCE = $bottom.getBoundingClientRect().top + 100;
-
-// const animate = (timestamp) => {
-//   const progress = Math.min(1, (timestamp - startTime) / duration);
-//   $clickable.style.top = `${progress * TRAVEL_DISTANCE}px`;
-//   if (progress < 1) requestAnimationFrame(animate);
-// };
-// requestAnimationFrame(animate);
+const youtube = document.getElementById('youtube');
+window.addEventListener('load', ()=>{
+    console.log('hello')
+    youtube.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+})
+onYouTubeIframeAPIReady();
