@@ -1,6 +1,7 @@
 let keys = ["a", "s", "d", " ", "j", "k", "l"];
 const tileBtns = document.querySelectorAll(".tileBtn");
 const tileLines = document.querySelectorAll(".tileLine");
+const video = document.getElementById('youtube')
 const keyMap = {
   "a": 0,
   "s": 1,
@@ -11,20 +12,18 @@ const keyMap = {
   "l": 6,
 };
 
+let bitmap;
+const fetchData = () => fetch("../scripts/song.json").then((response) => response.json());
+
 async function start(){
-  let bitmap;
-  fetch('./scripts/song.json').then(function(response) {
-    return response.json();
-  })
-  .then(function(myJson) {
-    bitmap = myJson;
-    console.log(bitmap)
+  bitmap = await fetchData();
+  
+  bitmap.forEach((item, index) => {
+    setTimeout(() => tileAnim(item.lineNum, item.time), (item.time - 1)*1000)
   });
-  await console.log(bitmap)
 }
-
-start();
-
+video.addEventListener('loadedmetadata', start);
+  
 
 const keyDownAnim = (idx) => {
   tileBtns[idx].style.background ="rgb(255,255,255) radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(254,255,0,1) 50%, rgba(250,151,2,1) 100%)";
@@ -55,7 +54,7 @@ window.addEventListener("keyup", ({ key }) => {
   keys.includes(key) && KeyUpAnim(idx);
 });
 
-const tileAnim = (idx, type, time) => {
+const tileAnim = (idx,time,type) => {
   const tile = document.createElement('div')
   tile.className = 'tile'
   tileLines[idx].append(tile)
@@ -65,12 +64,8 @@ const tileAnim = (idx, type, time) => {
   const anim = (timestamp)=>{
     const progress = (timestamp - startTime) / 1000
     tile.style.bottom = `${yPos}%`
-    yPos = 100 - progress * 100
+    yPos = 100 - Math.min(progress * 100)
     if(yPos > 0) requestAnimationFrame(anim)
   }
   requestAnimationFrame(anim)
 }
-
-tileAnim(1)
-tileAnim(3)
-tileAnim(5)
