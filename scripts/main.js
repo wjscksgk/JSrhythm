@@ -121,9 +121,20 @@ const tileAnim = (idx,time,type) => {
     document.addEventListener('keydown', ({key}) => {
       const isChecked = !rhythem && !keyMap[key].isOnce && idx === keyMap[key].idx;
       if (isChecked) {
-        console.log('asd')
-        if (yPos <= 15 && yPos <= 10) {
-          console.log("Perfect: ", progress);
+        if (3 <= yPos && yPos <= 15) {
+          console.log("Perfect");
+          rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
+          tile.remove();
+        } else if(2 <= yPos && yPos <= 23){
+          console.log("Great");
+          rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
+          tile.remove();
+        } else if(0 < yPos && yPos <= 27){
+          console.log("Good");
+          rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
+          tile.remove();
+        } else if(0 <= yPos && yPos <= 40){
+          console.log("Miss");
           rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
           tile.remove();
         }
@@ -133,6 +144,9 @@ const tileAnim = (idx,time,type) => {
       requestAnimationFrame(anim)
     } 
     else {
+      if(!rhythem){
+        console.log("Miss");
+      }
       tile.remove();
       rhythem = true;
     } 
