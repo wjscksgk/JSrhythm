@@ -12,18 +12,29 @@ const keyMap = {
   "l": 6,
 };
 
-piano = [
-  new Audio('./sounds/도.mp3'),
-  new Audio('./sounds/레.mp3'),
-  new Audio('./sounds/미.mp3'),
-  new Audio('./sounds/파.mp3'),
-  new Audio('./sounds/솔.mp3'),
-  new Audio('./sounds/라.mp3'),
-  new Audio('./sounds/시.mp3'),
+drum = [
+  new Audio('./sounds/킥.wav'),
+  new Audio('./sounds/스네어.wav'),
+  new Audio('./sounds/하이햇.wav'),
 ];
-piano.forEach((item,idx) =>{
-  piano[idx].volume = 1.0;
+
+piano = [
+  // new Audio('./sounds/도.mp3'),
+  // new Audio('./sounds/레.mp3'),
+  // new Audio('./sounds/미.mp3'),
+  // new Audio('./sounds/파.mp3'),
+  // new Audio('./sounds/솔.mp3'),
+  // new Audio('./sounds/라.mp3'),
+  // new Audio('./sounds/시.mp3'),
+];
+// piano.forEach((item,idx) =>{
+//   piano[idx].volume = 1.0;
+// })
+
+drum.forEach((item,idx) =>{
+  drum[idx].volume = 1.0;
 })
+
 video.volume = 1
 
 let soundArr = []
@@ -49,7 +60,7 @@ const keyDownAnim = (idx) => {
   tileLines[idx].style.background = "rgba(247, 133, 0, 0.3)";
   tileLines[idx].style.boxShadow = "0px 0px 100px rgba(0,0,0,0.5)";
   tileLines[idx].style.transition = "0s";
-  soundManager(piano[idx]);
+  soundManager(drum[idx]);
 };
 
 const KeyUpAnim = (idx) => {
