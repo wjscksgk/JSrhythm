@@ -12,6 +12,22 @@ const keyMap = {
   "l": 6,
 };
 
+piano = [
+  new Audio('./sounds/도.mp3'),
+  new Audio('./sounds/레.mp3'),
+  new Audio('./sounds/미.mp3'),
+  new Audio('./sounds/파.mp3'),
+  new Audio('./sounds/솔.mp3'),
+  new Audio('./sounds/라.mp3'),
+  new Audio('./sounds/시.mp3'),
+];
+piano.forEach((item,idx) =>{
+  piano[idx].volume = 1.0;
+})
+video.volume = 1
+
+let soundArr = []
+
 let bitmap;
 const fetchData = () => fetch("../scripts/song.json").then((response) => response.json());
 
@@ -23,7 +39,7 @@ async function start(){
   });
 }
 video.addEventListener('loadedmetadata', start);
-  
+
 
 const keyDownAnim = (idx) => {
   tileBtns[idx].style.background ="rgb(255,255,255) radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(254,255,0,1) 50%, rgba(250,151,2,1) 100%)";
@@ -33,6 +49,7 @@ const keyDownAnim = (idx) => {
   tileLines[idx].style.background = "rgba(247, 133, 0, 0.3)";
   tileLines[idx].style.boxShadow = "0px 0px 100px rgba(0,0,0,0.5)";
   tileLines[idx].style.transition = "0s";
+  soundManager(piano[idx]);
 };
 
 const KeyUpAnim = (idx) => {
@@ -48,6 +65,7 @@ const KeyUpAnim = (idx) => {
 window.addEventListener("keydown", ({ key }) => {
   const idx = keyMap[key];
   !isNaN(idx) && keyDownAnim(idx);
+  
 });
 window.addEventListener("keyup", ({ key }) => {
   const idx = keyMap[key];
@@ -68,4 +86,11 @@ const tileAnim = (idx,time,type) => {
     if(yPos > 0) requestAnimationFrame(anim)
   }
   requestAnimationFrame(anim)
+}
+
+const soundManager = (inputSound) => {
+  soundArr.push(inputSound)
+  for(let i = 0; i < soundArr.length; i++){
+    soundArr[i].play()
+  }
 }
