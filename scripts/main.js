@@ -2,14 +2,37 @@ let keys = ["a", "s", "d", " ", "j", "k", "l"];
 const tileBtns = document.querySelectorAll(".tileBtn");
 const tileLines = document.querySelectorAll(".tileLine");
 const video = document.getElementById('youtube')
+
+let isOnce = false
 const keyMap = {
-  "a": 0,
-  "s": 1,
-  "d": 2,
-  " ": 3,
-  "j": 4,
-  "k": 5,
-  "l": 6,
+  "a": {
+    "idx" : 0,
+    "isOnce" : false
+  },
+  "s": {
+    "idx" : 1,
+    "isOnce" : false
+  },
+  "d": {
+    "idx" : 2,
+    "isOnce" : false
+  },
+  " ": {
+    "idx" : 3,
+    "isOnce" : false
+  },
+  "j": {
+    "idx" : 4,
+    "isOnce" : false
+  },
+  "k": {
+    "idx" : 5,
+    "isOnce" : false
+  },
+  "l": {
+    "idx" : 6,
+    "isOnce" : false
+  },
 };
 
 drum = [
@@ -35,7 +58,7 @@ drum.forEach((item,idx) =>{
   drum[idx].volume = 1.0;
 })
 
-video.volume = 0
+video.volume = 1
 
 let bitmap;
 const fetchData = () => fetch("../scripts/song.json").then((response) => response.json());
@@ -72,13 +95,15 @@ const KeyUpAnim = (idx) => {
 };
 
 window.addEventListener("keydown", ({ key }) => {
-  const idx = keyMap[key];
+  const idx = keyMap[key].idx;
   !isNaN(idx) && keyDownAnim(idx);
+  keyMap[key].isOnce = true;
   
 });
 window.addEventListener("keyup", ({ key }) => {
-  const idx = keyMap[key];
+  const idx = keyMap[key].idx;
   keys.includes(key) && KeyUpAnim(idx);
+  keyMap[key].isOnce = false;
 });
 
 const tileAnim = (idx,time,type) => {
@@ -87,12 +112,30 @@ const tileAnim = (idx,time,type) => {
   tileLines[idx].append(tile)
   let yPos = 100
   const startTime = performance.now()
+  let rhythem = false
 
   const anim = (timestamp)=>{
     const progress = (timestamp - startTime) / 1000
     tile.style.bottom = `${yPos}%`
     yPos = 100 - Math.min(progress * 100)
-    if(yPos > 0) requestAnimationFrame(anim)
+    document.addEventListener('keydown', ({key}) => {
+      const isChecked = !rhythem && !keyMap[key].isOnce && idx === keyMap[key].idx;
+      if (isChecked) {
+        console.log('asd')
+        if (yPos <= 15 && yPos <= 10) {
+          console.log("Perfect: ", progress);
+          rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
+          tile.remove();
+        }
+      }
+    })
+    if(yPos > 0){
+      requestAnimationFrame(anim)
+    } 
+    else {
+      tile.remove();
+      rhythem = true;
+    } 
   }
   requestAnimationFrame(anim)
 }
