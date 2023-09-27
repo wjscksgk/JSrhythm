@@ -35,9 +35,7 @@ drum.forEach((item,idx) =>{
   drum[idx].volume = 1.0;
 })
 
-video.volume = 1
-
-let soundArr = []
+video.volume = 0
 
 let bitmap;
 const fetchData = () => fetch("../scripts/song.json").then((response) => response.json());
@@ -100,8 +98,5 @@ const tileAnim = (idx,time,type) => {
 }
 
 const soundManager = (inputSound) => {
-  soundArr.push(inputSound)
-  for(let i = 0; i < soundArr.length; i++){
-    soundArr[i].play()
-  }
+  inputSound.play();
 }
