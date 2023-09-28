@@ -2,7 +2,7 @@ let keys = ["a", "s", "d", " ", "j", "k", "l"];
 const tileBtns = document.querySelectorAll(".tileBtn");
 const tileLines = document.querySelectorAll(".tileLine");
 const video = document.getElementById('youtube')
-
+const verdict = document.querySelector('.verdict h3')
 let isOnce = false
 const keyMap = {
   "a": {
@@ -121,26 +121,26 @@ const tileAnim = (idx,time,type) => {
     document.addEventListener('keydown', ({key}) => {
       const isChecked = !rhythem && !keyMap[key].isOnce && idx === keyMap[key].idx;
       if (isChecked) {
-        if (3 <= yPos && yPos <= 15) {
-          console.log("Perfect");
-          rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
-          tile.remove();
-        } else if(2 <= yPos && yPos <= 23){
-          console.log("Great");
-          rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
-          tile.remove();
-        } else if(0 < yPos && yPos <= 27){
-          console.log("Good");
-          rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
-          tile.remove();
-        } else if(0 <= yPos && yPos <= 40){
-          console.log("Miss");
-          rhythem = true; // 한 번만 실행되도록 스페이스바 상태 초기화
-          tile.remove();
+        if (3 <= yPos && yPos <= 20) {
+          verdict.textContent = "Perfect";
+          rhythem = true; 
+          tileLines[idx].children[0].remove();
+        } else if(2 <= yPos && yPos <= 30){
+          verdict.textContent = "Great";
+          rhythem = true; 
+          tileLines[idx].children[0].remove();
+        } else if(0 < yPos && yPos <= 40){
+          verdict.textContent = "Good";
+          rhythem = true; 
+          tileLines[idx].children[0].remove();
+        } else if(0 <= yPos && yPos <= 50){
+          verdict.textContent = "Miss";
+          rhythem = true; 
+          tileLines[idx].children[0].remove();
         }
       }
     })
-    if(yPos > 0){
+    if(yPos > -20){
       requestAnimationFrame(anim)
     } 
     else {
