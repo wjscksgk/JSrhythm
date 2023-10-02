@@ -118,25 +118,25 @@ const tileAnim = (idx,time,type) => {
     const progress = (timestamp - startTime) / 1000
     tile.style.bottom = `${yPos}%`
     yPos = 100 - Math.min(progress * 100)
+    const firstTile = tileLines[idx].children[0];
     document.addEventListener('keydown', ({key}) => {
       const isChecked = !rhythem && !keyMap[key].isOnce && idx === keyMap[key].idx;
       if (isChecked) {
         if (3 <= yPos && yPos <= 20) {
           verdict.textContent = "Perfect";
           rhythem = true; 
-          tileLines[idx].children[0].remove();
         } else if(2 <= yPos && yPos <= 30){
           verdict.textContent = "Great";
           rhythem = true; 
-          tileLines[idx].children[0].remove();
         } else if(0 < yPos && yPos <= 40){
           verdict.textContent = "Good";
           rhythem = true; 
-          tileLines[idx].children[0].remove();
         } else if(0 <= yPos && yPos <= 50){
           verdict.textContent = "Miss";
-          rhythem = true; 
-          tileLines[idx].children[0].remove();
+          rhythem = true;
+        }
+        if (0 <= yPos && yPos <= 50) {
+          firstTile.remove();
         }
       }
     })
@@ -145,7 +145,7 @@ const tileAnim = (idx,time,type) => {
     } 
     else {
       if(!rhythem){
-        console.log("Miss");
+        verdict.textContent = "Miss";
       }
       tile.remove();
       rhythem = true;
