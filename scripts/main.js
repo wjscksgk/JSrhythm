@@ -58,7 +58,7 @@ drum.forEach((item,idx) =>{
   drum[idx].volume = 1.0;
 })
 
-video.volume = 1
+video.volume = 0
 
 let bitmap;
 const fetchData = () => fetch("../scripts/song.json").then((response) => response.json());
@@ -70,7 +70,7 @@ async function start(){
     setTimeout(() => tileAnim(item.lineNum, item.time), (item.time - 1)*1000)
   });
 }
-video.addEventListener('loadedmetadata', start);
+video.addEventListener('loadeddata', start);
 
 
 const keyDownAnim = (idx) => {
@@ -95,15 +95,19 @@ const KeyUpAnim = (idx) => {
 };
 
 window.addEventListener("keydown", ({ key }) => {
-  const idx = keyMap[key].idx;
-  !isNaN(idx) && keyDownAnim(idx);
-  keyMap[key].isOnce = true;
+  if(keys.includes(key)){
+    const idx = keyMap[key].idx;
+    !isNaN(idx) && keyDownAnim(idx);
+    keyMap[key].isOnce = true;
+  }
   
 });
 window.addEventListener("keyup", ({ key }) => {
-  const idx = keyMap[key].idx;
-  keys.includes(key) && KeyUpAnim(idx);
-  keyMap[key].isOnce = false;
+  if(keys.includes(key)){
+    const idx = keyMap[key].idx;
+    KeyUpAnim(idx);
+    keyMap[key].isOnce = false;
+  }
 });
 
 const tileAnim = (idx,time,type) => {
@@ -120,7 +124,10 @@ const tileAnim = (idx,time,type) => {
     yPos = 100 - Math.min(progress * 100)
     const firstTile = tileLines[idx].children[0];
     document.addEventListener('keydown', ({key}) => {
-      const isChecked = !rhythem && !keyMap[key].isOnce && idx === keyMap[key].idx;
+      let isChecked = false; 
+      if(keys.includes(key)){
+        isChecked = !rhythem && !keyMap[key].isOnce && idx === keyMap[key].idx;
+      }
       if (isChecked) {
         if (3 <= yPos && yPos <= 20) {
           verdict.textContent = "Perfect";
@@ -140,12 +147,13 @@ const tileAnim = (idx,time,type) => {
         }
       }
     })
-    if(yPos > -20){
+    if(yPos > 0){
       requestAnimationFrame(anim)
     } 
     else {
       if(!rhythem){
         verdict.textContent = "Miss";
+        console.log("내가 범인임 ㅇㅇ")
       }
       tile.remove();
       rhythem = true;
